@@ -10,14 +10,16 @@
     margin:0; height:100%; background:#0a0f1a; /* azul oscuro de fondo */ overflow:hidden;
   }
   /* Tierra al fondo */
-  .earth-band{
-    position:fixed; left:0; bottom:0; width:100%;
-    height:40vh; /* ajusta la altura de la franja */
-    background:url("earth-half.png") no-repeat center bottom;
-    background-size: 100% auto; /* prueba 120%–180% */
-    border:2px solid #0a0f1a; /* borde negro/azul oscuro para que se funda */
-    z-index:0;
-  }
+.earth-band{
+  position:fixed; left:0; bottom:0; width:100%;
+  height:40vh;                           /* tu altura actual */
+  background-image:url("earth-bottom.png");
+  background-repeat:no-repeat;
+  background-position:center top;        /* MUESTRA LA PARTE SUPERIOR */
+  background-size:auto 200%;             /* Hace que solo se vea el 50% superior */
+  border:2px solid #0a0f1a;              /* borde oscuro, invisible */
+  z-index:0;
+}
   model-viewer{
     position:fixed; inset:0; width:100%; height:100%;
     --poster-color:#0a0f1a; z-index:1;
@@ -34,6 +36,7 @@
   </model-viewer>
 </body>
 </html>
+
 
 
 

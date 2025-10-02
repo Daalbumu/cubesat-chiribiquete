@@ -1,85 +1,49 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Cubesat Chiribiquete – Visor</title>
-
-  <!-- Carga model-viewer -->
-  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-
-  <style>
-    :root { --bg: #0a0f1a; }
-    html, body {
-      margin: 0; height: 100%; background: var(--bg); overflow: hidden;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
-    }
-
-    /* Contenedor de capas */
-    .stage {
-      position: fixed; inset: 0;
-      display: grid; place-items: center;
-    }
-
-    /* Capa Tierra (atrás) */
-    .earth-wrap {
-      position: fixed; inset: 0;
-      pointer-events: none; /* no bloquea el 3D */
-      z-index: 0;
-    }
-    .earth {
-      position: absolute;
-      left: 50%;
-      bottom: -8vh;               /* ajusta cuánto se ve la curva */
-      transform: translateX(-50%);
-      width: min(95vw, 1600px);   /* tamaño máximo */
-      opacity: 0.95;              /* ajusta intensidad */
-      user-select: none;
-      display: block;
-      filter: drop-shadow(0 18px 36px rgba(0,0,0,0.6));
-    }
-
-    /* Capa modelo 3D (adelante) */
-    model-viewer {
-      width: 100vw; height: 100vh;
-      --poster-color: var(--bg);
-      background:
-        radial-gradient(1200px 600px at 50% 20%, rgba(255,255,255,0.05), transparent 60%),
-        var(--bg);
-      z-index: 1;
-    }
-
-    /* Suave degradado superior opcional */
-    .fade-top {
-      position: fixed; inset: 0 0 auto 0; height: 16vh;
-      background: linear-gradient(var(--bg), transparent);
-      pointer-events: none;
-      z-index: 2;
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cubesat + Tierra</title>
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+<style>
+  :root { --bg:#0a0f1a; }
+  html,body{margin:0;height:100%;background:var(--bg);overflow:hidden;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;}
+  /* Faja inferior con la Tierra como background */
+  .earth-band{
+    position:fixed; left:0; bottom:0; width:100%; height:40vh; /* ajusta altura visible */
+    background-image:url("earth-bottom.png");           /* <- NOMBRE EXACTO */
+    background-repeat:no-repeat;
+    background-position:center bottom;
+    background-size:contain;    /* mantiene proporción, encaja en ancho */
+    pointer-events:none;        /* no bloquea interacción */
+    z-index:0;
+  }
+  /* Capa del modelo encima */
+  model-viewer{
+    position:fixed; inset:0;
+    width:100vw; height:100vh;
+    --poster-color:var(--bg);
+    background:
+      radial-gradient(1200px 600px at 50% 20%, rgba(255,255,255,0.05), transparent 60%),
+      var(--bg);
+    z-index:1;
+  }
+</style>
 </head>
 <body>
 
-  <!-- Tierra detrás -->
-  <div class="earth-wrap">
-    <img class="earth" src="earth-bottom.svg" alt="Curvatura de la Tierra">
-  </div>
+  <div class="earth-band"></div>
 
-  <!-- Modelo 3D al frente -->
-  <div class="stage">
-    <model-viewer
-      src="segundaprueba.glb"
-      alt="Nanosatélite Cubesat Chiribiquete"
-      camera-controls
-      autoplay
-      auto-rotate
-      rotation-per-second="10deg"
-      exposure="0.9"
-      shadow-intensity="0.6"
-      interaction-prompt="none">
-    </model-viewer>
-  </div>
+  <model-viewer src="segundaprueba.glb"
+    alt="Cubesat"
+    camera-controls
+    autoplay
+    auto-rotate
+    rotation-per-second="10deg"
+    exposure="0.9"
+    shadow-intensity="0.6"
+    interaction-prompt="none">
+  </model-viewer>
 
-  <div class="fade-top"></div>
 </body>
 </html>

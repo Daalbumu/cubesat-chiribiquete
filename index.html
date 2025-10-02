@@ -1,37 +1,30 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Cubesat + Tierra</title>
-<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-<style>
-  :root { --bg:#0a0f1a; }
-  html,body{margin:0;height:100%;background:var(--bg);overflow:hidden;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;}
-  /* Faja inferior con la Tierra como background */
-  .earth-band{
-    position:fixed; left:0; bottom:0; width:100%; height:40vh; /* ajusta altura visible */
-    background-image:url("earth-bottom.png");           /* <- NOMBRE EXACTO */
-    background-repeat:no-repeat;
-    background-position:center bottom;
-    background-size:contain;    /* mantiene proporción, encaja en ancho */
-    pointer-events:none;        /* no bloquea interacción */
-    z-index:0;
-  }
-  /* Capa del modelo encima */
-  model-viewer{
-    position:fixed; inset:0;
-    width:100vw; height:100vh;
-    --poster-color:var(--bg);
-    background:
-      radial-gradient(1200px 600px at 50% 20%, rgba(255,255,255,0.05), transparent 60%),
-      var(--bg);
-    z-index:1;
-  }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cubesat + Tierra</title>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <style>
+    html,body{margin:0;height:100%;background:#0a0f1a;overflow:hidden}
+    /* Tierra al fondo */
+    .earth-band{
+      position:fixed; left:0; bottom:0;
+      width:100%; height:40vh;
+      background:url("earth-bottom.png") no-repeat center bottom;
+      background-size:contain;
+      border:2px solid red; /* <-- Debug visual */
+      z-index:0;
+    }
+    model-viewer{
+      position:fixed; inset:0;
+      width:100%; height:100%;
+      --poster-color:#0a0f1a;
+      z-index:1;
+    }
+  </style>
 </head>
 <body>
-
   <div class="earth-band"></div>
 
   <model-viewer src="segundaprueba.glb"
@@ -44,6 +37,5 @@
     shadow-intensity="0.6"
     interaction-prompt="none">
   </model-viewer>
-
 </body>
 </html>

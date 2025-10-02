@@ -6,44 +6,37 @@
 <title>Cubesat + Tierra</title>
 <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 <style>
-  :root { --bg:#0a0f1a; } /* azul muy oscuro */
-  html,body{ margin:0; height:100%; background:var(--bg); overflow:hidden; }
+  html,body{
+    margin:0;
+    height:100%;
+    background:#0a0f1a; /* azul oscuro de fondo */
+    overflow:hidden;
+  }
 
-  /* Faja inferior: Tierra como background (detrás del 3D) */
+  /* Tierra al fondo */
   .earth-band{
-    position:fixed; left:0; bottom:0; width:100%;
-    height:45vh;                         /* ajusta cuánto planeta se ve */
-    background-image:url("earth-bottom.png"); /* nombre EXACTO del PNG */
-    background-repeat:no-repeat;
-    background-position:center bottom;
-    background-size:cover;               /* llena la faja, sin dejar márgenes */
-    border-top:2px solid #0b1220;        /* borde oscuro, casi imperceptible */
-    background-color:var(--bg);          /* “relleno” por si falta imagen */
-    pointer-events:none;                 /* no bloquea interacción */
+    position:fixed;
+    left:0;
+    bottom:0;
+    width:100%;
+    height:40vh; /* ajusta la altura de la franja */
+    background:url("earth-bottom.png") no-repeat center bottom;
+    background-size:contain;
+    border:2px solid #0a0f1a; /* borde negro/azul oscuro para que se funda */
     z-index:0;
   }
 
-  /* Modelo 3D al frente */
   model-viewer{
-    position:fixed; inset:0;
-    width:100vw; height:100vh;
-    --poster-color:var(--bg);
-    background:
-      radial-gradient(1200px 600px at 50% 20%, rgba(255,255,255,0.05), transparent 60%),
-      var(--bg);
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    --poster-color:#0a0f1a;
     z-index:1;
-  }
-
-  /* Opcional: degradado suave arriba */
-  .fade-top{
-    position:fixed; inset:0 0 auto 0; height:14vh;
-    background:linear-gradient(var(--bg),transparent);
-    pointer-events:none; z-index:2;
   }
 </style>
 </head>
 <body>
-
   <div class="earth-band"></div>
 
   <model-viewer
@@ -57,7 +50,5 @@
     shadow-intensity="0.6"
     interaction-prompt="none">
   </model-viewer>
-
-  <div class="fade-top"></div>
 </body>
 </html>

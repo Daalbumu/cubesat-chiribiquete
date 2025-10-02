@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cubesat Chiribiquete – Visor</title>
+
+  <!-- model-viewer (Google) para cargar .glb directo -->
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+  <style>
+    html, body {
+      margin: 0; height: 100%; background: #0a0f1a; overflow: hidden; 
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    }
+    .wrap {
+      position: fixed; inset: 0;
+      display: grid; place-items: center;
+    }
+    model-viewer {
+      width: 100vw; height: 100vh;
+      --poster-color: #0a0f1a;
+      background: radial-gradient(1200px 600px at 50% 20%, rgba(255,255,255,0.05), transparent 60%);
+    }
+    /* Tierra fija al fondo inferior */
+    .earth-bottom {
+      position: fixed;
+      left: 50%;
+      bottom: -10vh; /* empuja un poco hacia abajo para que se vea la “punta” */
+      transform: translateX(-50%);
+      width: min(90vw, 1400px);
+      opacity: 0.85;
+      pointer-events: none; /* no bloquea interacción del modelo */
+      filter: drop-shadow(0 8px 18px rgba(0,0,0,0.55));
+      user-select: none;
+    }
+    /* Sutileza: degradado superior para limpiar bordes */
+    .fade-top {
+      position: fixed; inset: 0 0 auto 0; height: 15vh;
+      background: linear-gradient(#0a0f1a, transparent);
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrap">
+    <!-- Solo reproduce el GLB que nos pasaste -->
+    <model-viewer
+      src="segundaprueba.glb"
+      alt="Nanosatélite Cubesat Chiribiquete"
+      camera-controls
+      autoplay
+      ar
+      auto-rotate
+      rotation-per-second="10deg"
+      exposure="0.9"
+      shadow-intensity="0.6"
+      interaction-prompt="none"
+      disable-zoom="false"
+      touch-action="pan-y"
+      style="--progress-bar-color: #00e0ff;">
+    </model-viewer>
+  </div>
+
+  <!-- Imagen de la Tierra anclada abajo (pon tu PNG aquí con ese nombre) -->
+  <img class="earth-bottom" src="earth-bottom.png" alt="Planeta Tierra (borde inferior)">
+
+  <div class="fade-top"></div>
+</body>
+</html>

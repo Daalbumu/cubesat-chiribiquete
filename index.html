@@ -6,34 +6,56 @@
 <title>Cubesat + Tierra</title>
 <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 <style>
-  html,body{
-    margin:0; height:100%; background:#0a0f1a; /* azul oscuro de fondo */ overflow:hidden;
-  }
-  /* Tierra al fondo */
+  :root { --bg:#0a0f1a; } /* azul muy oscuro */
+  html,body{ margin:0; height:100%; background:var(--bg); overflow:hidden; }
+
+  /* Franja de la Tierra: ocupa desde 50vh hasta abajo y cubre todo el ancho */
   .earth-band{
-    position:fixed; left:0; bottom:0; width:100%;
-    height:40vh; /* ajusta la altura de la franja */
-    background:url("earth-bottom.png") no-repeat center bottom;
-    background-size: 60% auto; /* prueba 120%–180% */
-    border:2px solid #0a0f1a; /* borde negro/azul oscuro para que se funda */
-    z-index:0;
+    position:fixed;
+    left:0; top:50vh;           /* empieza a la mitad de la pantalla */
+    width:100%; height:50vh;    /* mitad inferior completa */
+    background-image:url("earth-half.png"); /* <-- pon el nombre exacto del archivo */
+    background-repeat:no-repeat;
+    background-position:center top;  /* alinea el borde superior con la mitad */
+    background-size:cover;           /* llena de izquierda a derecha */
+    border-top:2px solid #0a0f1a;    /* borde oscuro, se camufla */
+    background-color:transparent;
+    pointer-events:none;             /* no bloquea el 3D */
+    z-index:0;                       /* detrás del modelo 3D */
   }
+
+  /* Modelo 3D al frente */
   model-viewer{
-    position:fixed; inset:0; width:100%; height:100%;
-    --poster-color:#0a0f1a; z-index:1;
+    position:fixed; inset:0;
+    width:100vw; height:100vh;
+    --poster-color:var(--bg);
+    background:
+      radial-gradient(1200px 600px at 50% 20%, rgba(255,255,255,0.05), transparent 60%),
+      var(--bg);
+    z-index:1;
+  }
+
+  /* En pantallas pequeñas, dale un poquito más de alto si quieres */
+  @media (max-width: 600px){
+    .earth-band{ top:48vh; height:52vh; }
   }
 </style>
 </head>
 <body>
+
   <div class="earth-band"></div>
 
-  <model-viewer src="segundaprueba.glb"
-    alt="Cubesat" camera-controls autoplay auto-rotate
-    rotation-per-second="10deg" exposure="0.9"
-    shadow-intensity="0.6" interaction-prompt="none">
+  <model-viewer
+    src="segundaprueba.glb"
+    alt="Cubesat"
+    camera-controls
+    autoplay
+    auto-rotate
+    rotation-per-second="10deg"
+    exposure="0.9"
+    shadow-intensity="0.6"
+    interaction-prompt="none">
   </model-viewer>
+
 </body>
 </html>
-
-
-

@@ -6,55 +6,32 @@
 <title>Cubesat + Tierra</title>
 <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 <style>
-  :root { --bg:#0a0f1a; }
-  html,body{ margin:0; height:100%; background:var(--bg); overflow:hidden; }
-
-  /* Tierra como “fondo” seguro detrás del 3D */
-  body::after{
-    content:"";
-    position:fixed; left:0; bottom:0; width:100%; height:48vh;   /* ajusta cuánto planeta se ve */
-    background-image:url("earth-bottom.png?v=2");  /* cache-buster */
-    background-repeat:no-repeat;
-    background-position:center bottom;
-    background-size:cover;                          /* cubre de izq a der */
-    pointer-events:none;
-    z-index:0;                                      /* detrás del 3D */
-    border-top:2px solid #0a0f1a;                   /* borde oscuro, invisible */
+  html,body{
+    margin:0; height:100%; background:#0a0f1a; /* azul oscuro de fondo */ overflow:hidden;
   }
-
-  /* Modelo 3D al frente */
+  /* Tierra al fondo */
+  .earth-band{
+    position:fixed; left:0; bottom:0; width:100%;
+    height:40vh; /* ajusta la altura de la franja */
+    background:url("earth-bottom.png") no-repeat center bottom;
+    background-size:cover;  /* << antes: contain */
+    border:2px solid #0a0f1a; /* borde negro/azul oscuro para que se funda */
+    z-index:0;
+  }
   model-viewer{
-    position:fixed; inset:0;
-    width:100vw; height:100vh;
-    --poster-color:var(--bg);
-    background:
-      radial-gradient(1200px 600px at 50% 20%, rgba(255,255,255,0.05), transparent 60%),
-      var(--bg);
-    z-index:1;
-  }
-
-  @media (max-width: 600px){
-    body::after{ height:55vh; } /* un poco más alta en móvil */
+    position:fixed; inset:0; width:100%; height:100%;
+    --poster-color:#0a0f1a; z-index:1;
   }
 </style>
 </head>
 <body>
+  <div class="earth-band"></div>
 
-  <model-viewer
-    src="segundaprueba.glb"
-    alt="Cubesat"
-    camera-controls
-    autoplay
-    auto-rotate
-    rotation-per-second="10deg"
-    exposure="0.9"
-    shadow-intensity="0.6"
-    interaction-prompt="none">
+  <model-viewer src="segundaprueba.glb"
+    alt="Cubesat" camera-controls autoplay auto-rotate
+    rotation-per-second="10deg" exposure="0.9"
+    shadow-intensity="0.6" interaction-prompt="none">
   </model-viewer>
-
-  <!-- Fallback NO-JS opcional: por si quieres ver si la imagen carga -->
-  <noscript>
-    <img src="earth-bottom.png?v=2" alt="Tierra" style="position:fixed;left:0;bottom:0;width:100%;height:48vh;object-fit:cover;z-index:0;">
-  </noscript>
 </body>
 </html>
+

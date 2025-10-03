@@ -10,16 +10,16 @@
     margin:0; height:100%; background:#0a0f1a; /* azul oscuro de fondo */ overflow:hidden;
   }
   /* Tierra al fondo */
-.earth-band{
-  position:fixed; left:0; bottom:0; width:100%;
-  height:40vh;                           /* tu altura actual */
-  background-image:url("earth-bottom.png");
-  background-repeat:no-repeat;
-  background-position:center top;        /* MUESTRA LA PARTE SUPERIOR */
-  background-size: 160% 200%;             /* Hace que solo se vea el 50% superior */
-  border:2px solid #0a0f1a;              /* borde oscuro, invisible */
-  z-index:0;
-}
+  .earth-band{
+    position:fixed; left:0; bottom:0; width:100%;
+    height:40vh;                           /* tu altura actual */
+    background-image:url("earth-bottom.png");
+    background-repeat:no-repeat;
+    background-position:center top;        /* MUESTRA LA PARTE SUPERIOR */
+    background-size:160% 200%;             /* más ancho (X) y 200% en alto */
+    border:2px solid #0a0f1a;              /* borde oscuro, invisible */
+    z-index:0;
+  }
   model-viewer{
     position:fixed; inset:0; width:100%; height:100%;
     --poster-color:#0a0f1a; z-index:1;
@@ -29,16 +29,43 @@
 <body>
   <div class="earth-band"></div>
 
-  <model-viewer src="segundaprueba.glb"
-    alt="Cubesat" camera-controls autoplay auto-rotate
-    rotation-per-second="10deg" exposure="0.9"
-    shadow-intensity="0.6" interaction-prompt="none">
+  <model-viewer id="mv"
+    src="segundaprueba.glb"
+    alt="Cubesat"
+    camera-controls
+    interaction-prompt="none"
+    exposure="0.9"
+    shadow-intensity="0.6">
   </model-viewer>
+
+  <script>
+    const mv = document.getElementById('mv');
+    const KEY = 'cubesat_camera_v1';
+
+    // Restaura cámara al cargar el modelo
+    mv.addEventListener('load', () => {
+      try {
+        const saved = JSON.parse(localStorage.getItem(KEY) || 'null');
+        if (saved) {
+          const { orbit, target, fov } = saved;
+          if (orbit) mv.cameraOrbit = `${orbit.theta}rad ${orbit.phi}rad ${orbit.radius}m`;
+          if (target) mv.cameraTarget = `${target.x}m ${target.y}m ${target.z}m`;
+          if (fov)    mv.fieldOfView = fov;
+        }
+      } catch(e){}
+    });
+
+    // Guarda cámara cada vez que la mueves
+    mv.addEventListener('camera-change', () => {
+      const o = mv.getCameraOrbit();   // {theta, phi, radius}
+      const t = mv.getCameraTarget();  // {x, y, z}
+      const f = mv.getFieldOfView();   // string con unidades (ej: "30deg")
+      localStorage.setItem(KEY, JSON.stringify({
+        orbit: { theta: o.theta, phi: o.phi, radius: o.radius },
+        target: { x: t.x, y: t.y, z: t.z },
+        fov: f
+      }));
+    });
+  </script>
 </body>
 </html>
-
-
-
-
-
-

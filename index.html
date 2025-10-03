@@ -29,10 +29,12 @@
 <body>
   <div class="earth-band"></div>
 
+  <!-- Autoplay para que corran las animaciones del GLB; SIN auto-rotate de la cámara -->
   <model-viewer id="mv"
     src="segundaprueba.glb"
     alt="Cubesat"
     camera-controls
+    autoplay
     interaction-prompt="none"
     exposure="0.9"
     shadow-intensity="0.6">
@@ -42,8 +44,12 @@
     const mv = document.getElementById('mv');
     const KEY = 'cubesat_camera_v1';
 
-    // Restaura cámara al cargar el modelo
+    // ---- 1) EVITAR rotación automática de la cámara (no usamos auto-rotate) ----
+    // (Nada que hacer aquí: con no poner 'auto-rotate' ya no gira el plano/cámara)
+
+    // ---- 2) PERSISTIR la cámara donde la dejas ----
     mv.addEventListener('load', () => {
+      // Restaurar cámara
       try {
         const saved = JSON.parse(localStorage.getItem(KEY) || 'null');
         if (saved) {
@@ -53,13 +59,28 @@
           if (fov)    mv.fieldOfView = fov;
         }
       } catch(e){}
+
+      // ---- 3) ELEGIR animación que NO sea "spin"/"turntable" si existen varias ----
+      // Si tu GLB tiene múltiples animaciones y una rota todo, intentamos escoger otra.
+      const list = mv.availableAnimations || [];
+      if (list.length > 0) {
+        // Busca una que no parezca rotación general del modelo
+        const prefer = list.find(n =>
+          !/spin|turn|rotate|orbit|giro|rotacion|rotation/i.test(n)
+        );
+        if (prefer) {
+          mv.animationName = prefer;
+        } else {
+          mv.animationName = list[0]; // usa la primera si no hay alternativa
+        }
+        mv.paused = false; // asegura reproducción
+      }
     });
 
-    // Guarda cámara cada vez que la mueves
     mv.addEventListener('camera-change', () => {
-      const o = mv.getCameraOrbit();   // {theta, phi, radius}
-      const t = mv.getCameraTarget();  // {x, y, z}
-      const f = mv.getFieldOfView();   // string con unidades (ej: "30deg")
+      const o = mv.getCameraOrbit();
+      const t = mv.getCameraTarget();
+      const f = mv.getFieldOfView();
       localStorage.setItem(KEY, JSON.stringify({
         orbit: { theta: o.theta, phi: o.phi, radius: o.radius },
         target: { x: t.x, y: t.y, z: t.z },
@@ -69,3 +90,4 @@
   </script>
 </body>
 </html>
+
